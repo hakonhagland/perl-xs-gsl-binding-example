@@ -7,8 +7,9 @@ use ExtUtils::MakeMaker;
 # If @ARGV == 1, assume it is the path to the GSL installation directory
 my $libs = '-lgsl -lgslcblas';
 my $inc = '-I/usr/local/include';
+die "Usage: $0 [GSL_DIR]\n" if (@ARGV > 1);
 if (@ARGV == 1) {
-    my $gsl_dir = $ARGV[0];
+    my $gsl_dir = shift @ARGV;
     $gsl_dir =~ s/\/$//;
     $libs = '-L' . $gsl_dir . '/lib ' . $libs;
     $inc = '-I' . $gsl_dir . '/include ';
