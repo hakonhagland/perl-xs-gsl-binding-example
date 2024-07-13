@@ -4,7 +4,17 @@ use warnings;
 use utf8;
 use ExtUtils::MakeMaker;
 
-my $libdir = '/opt/gsl/gsl-2.8';
+# If @ARGV == 1, assume it is the path to the GSL installation directory
+my $libs = '-lgsl -lgslcblas';
+my $inc = '-I/usr/local/include';
+if (@ARGV == 1) {
+    my $gsl_dir = $ARGV[0];
+    $gsl_dir =~ s/\/$//;
+    $libs = '-L' . $gsl_dir . '/lib ' . $libs;
+    $inc = '-I' . $gsl_dir . '/include ';
+}
+say "Using LIBS: $libs";
+say "Using INC : $inc";
 
 WriteMakefile(
   NAME          => 'My::Bessel',
@@ -14,8 +24,8 @@ WriteMakefile(
   AUTHOR        => 'Håkon Hægland <hakon.hagland@gmail.com>',
   OPTIMIZE      => '',
   LICENSE       => 'perl',
-  LIBS          => ['-L' . $libdir . '/lib -lgsl -lgslcblas'],
+  LIBS          => [$libs],
   DEFINE        => '',
-  INC           => '-I' . $libdir . '/include',
+  INC           => $inc,
 );
 
